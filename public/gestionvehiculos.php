@@ -1,9 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.html");
-    exit();
-}
+header("Location: public/login.html");
+exit();
 ?>
 <!DOCTYPE html>
 <html lang="es">

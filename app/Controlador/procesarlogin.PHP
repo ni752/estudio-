@@ -13,19 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute(['usuario' => $usuario]);
         $user = $stmt->fetch();
 
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['usuario'] = $user['usuario'];
-            $_SESSION['id_usuario'] = $user['id'];
-            
-            header("Location: /Taller-Mecanica/public/gestionvehiculos.php");
-            exit();
+   if ($user && password_verify($password, $user['password'])) {
+    session_start();
+    $_SESSION['usuario'] = $user['usuario'];
+    
+    header("Location: /estudio-/Taller-Mecanica/public/gestionvehiculos.php");
+    exit();
+}
+};
         } else {
             header("Location: /Taller-Mecanica/public/login.html?error=Credenciales incorrectas");
             exit();
         }
-    } else {
         header("Location: /Taller-Mecanica/public/login.html?error=Campos vacios");
         exit();
-    }
-}
 ?>
