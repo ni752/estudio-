@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS taller_mecanica;
+USE taller_mecanica;
+
+CREATE TABLE vehiculos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    modelo VARCHAR(100) NOT NULL,
+    marca VARCHAR(100) NOT NULL,
+    anio INT NOT NULL,
+    fecha_ingreso DATE NOT NULL,
+    fecha_salida DATE NULL,
+    estado ENUM('En mantenimiento', 'reparado') DEFAULT 'En mantenimiento'
+);

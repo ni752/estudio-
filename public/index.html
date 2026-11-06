@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Vehículos - Taller</title>
+</head>
+
+<body>
+    <header>
+        <h1>Taller de Mecánica - Control de Vehículos</h1>
+         <nav>
+        <a href="cerrarSesion.php"><button>Cerrar Sesión</button></a>
+    </nav>
+    </header>
+
+    <main>
+        <section class="filtros">
+            <label for="filtroEstado">Filtrar por estado:</label>
+            <select id="filtroEstado" onchange="cargarVehiculos()">
+                <option value="">Todos</option>
+                <option value="En mantenimiento">En mantenimiento</option>
+                <option value="reparado">Reparado</option>
+            </select>
+            <button onclick="toggleFormulario()">Nuevo Vehículo</button>
+        </section>
+
+        <section id="seccionFormulario" style="display: none;">
+            <form id="formVehiculo" onsubmit="guardarVehiculo(event)">
+                <h2>Registrar / Modificar Vehículo</h2>
+                <input type="hidden" id="vehiculoId">
+
+                <label for="modelo">Modelo:</label>
+                <input type="text" id="modelo" required>
+
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" required>
+
+                <label for="anio">Año:</label>
+                <input type="number" id="anio" required>
+
+                <label for="fecha_ingreso">Fecha Ingreso:</label>
+                <input type="date" id="fecha_ingreso" required>
+
+                <label for="estado">Estado:</label>
+                <select id="estado">
+                    <option value="En mantenimiento">En mantenimiento</option>
+                    <option value="reparado">Reparado</option>
+                </select>
+
+                <button type="submit">Guardar</button>
+            </form>
+        </section>
+
+        <section>
+            <table border="1" id="tablaVehiculos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Modelo</th>
+                        <th>Marca</th>
+                        <th>Año</th>
+                        <th>Ingreso</th>
+                        <th>Salida</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="assets/js/vehiculos.js"></script>
+</body>
+</html>
