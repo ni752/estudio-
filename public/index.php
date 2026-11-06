@@ -1,3 +1,7 @@
+<?php
+header("Location: public/login.html");
+exit();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

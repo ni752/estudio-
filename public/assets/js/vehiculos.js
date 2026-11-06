@@ -1,52 +1,53 @@
 document.addEventListener("DOMContentLoaded", () => {
-    cargarVehiculos();
-});
+    const tabla = document.querySelector("#tabla-vehiculos tbody");
+    const filtro = document.querySelector("#filtro-estado");
 
-function cargarVehiculos() {
-    let estado = document.getElementById("filtroEstado").value;
-    let url = "api/vehiculos.php";
-    if (estado) {
-        url += "?estado=" + encodeURIComponent(estado);
+    async function cargar(estado = "") {
+        let url = "api/vehiculos.php";
+        if (estado) url += `?estado=${estado}`;
+        const res = await fetch(url);
+        const autos = await res.json();
+        
+        tabla.innerHTML = "";
+        if (!Array.isArray(autos) || autos.length === 0) {
+            tabla.innerHTML = `<tr><td colspan="7">Sin registros</td></tr>`;
+            return;
+        }
+
+        autos.forEach(v => {
+            tabla.innerHTML += `
+                <tr>
+                    <td>${v.id}</td>
+                    <td>${v.marca}</td>
+                    <td>${v.modelo}</td>
+                    <td>${v.anio}</td>
+                    <td>${v.fecha_ingreso}</td>
+                    <td>${v.estado}</td>
+                    <td>
+                        <button onclick="cambiarEstado(${v.id}, '${v.estado}')">Cambiar Estado</button>
+                        <button onclick="eliminar(${v.id})">Eliminar</button>
+                    </td>
+                </tr>`;
+        });
     }
 
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            let tbody = document.getElementById("cuerpoTabla");
-            tbody.innerHTML = "";
+    if (filtro) filtro.addEventListener("change", e => cargar(e.target.value));
+    cargar();
+});
 
-            data.forEach(auto => {
-                let tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${auto.id}</td>
-                    <td>${auto.modelo}</td>
-                    <td>${auto.marca}</td>
-                    <td>${auto.anio}</td>
-                    <td>${auto.fecha_ingreso}</td>
-                    <td>${auto.fecha_salida || 'No registrada'}</td>
-                    <td>${auto.estado}</td>
-                    <td>
-                        <button onclick="eliminarVehiculo(${auto.id})">Eliminar</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        })
-        .catch(error => console.error("Error al cargar vehículos:", error));
+async function cambiarEstado(id, actual) {
+    const nuevo = actual === "En mantenimiento" ? "reparado" : "En mantenimiento";
+    const res = await fetch(`api/vehiculos.php/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ estado: nuevo })
+    });
+    if (res.ok) location.reload();
 }
 
-function toggleFormulario() {
-    let sec = document.getElementById("seccionFormulario");
-    sec.style.display = sec.style.display === "none" ? "block" : "none";
-}
-
-function guardarVehiculo(event) {
-    event.preventDefault();
-    // Aquí puedes enviar los datos por fetch POST al controlador PHP
-}
-
-function eliminarVehiculo(id) {
-    if (confirm("¿Estás seguro de eliminar este auto?")) {
-        // Lógica para eliminar mediante fetch al backend
+async function eliminar(id) {
+    if (confirm("¿Eliminar vehículo?")) {
+        const res = await fetch(`api/vehiculos.php/${id}`, { method: "DELETE" });
+        if (res.ok) location.reload();
     }
 }
