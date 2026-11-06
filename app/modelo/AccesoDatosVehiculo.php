@@ -3,7 +3,6 @@ require_once __DIR__ . '/ConectorPDO.php';
 
 class AccesoDatosVehiculo {
 
-    // Mostrar todos los autos o filtrar por estado
     public static function obtenerVehiculos($estado = null) {
         $conexion = ConectorPDO::conectar();
         if ($estado) {
@@ -17,7 +16,6 @@ class AccesoDatosVehiculo {
         return $stmt->fetchAll();
     }
 
-    // Mostrar detalle de un auto por ID
     public static function obtenerVehiculoPorId($id) {
         $conexion = ConectorPDO::conectar();
         $sql = "SELECT * FROM vehiculos WHERE id = :id";
@@ -26,7 +24,6 @@ class AccesoDatosVehiculo {
         return $stmt->fetch();
     }
 
-    // Crear un auto
     public static function crearVehiculo($modelo, $marca, $anio, $fecha_ingreso, $fecha_salida, $estado) {
         $conexion = ConectorPDO::conectar();
         $sql = "INSERT INTO vehiculos (modelo, marca, anio, fecha_ingreso, fecha_salida, estado) 
@@ -42,7 +39,6 @@ class AccesoDatosVehiculo {
         ]);
     }
 
-    // Modificar por completo un auto (PUT)
     public static function actualizarVehiculoCompleto($id, $modelo, $marca, $anio, $fecha_ingreso, $fecha_salida, $estado) {
         $conexion = ConectorPDO::conectar();
         $sql = "UPDATE vehiculos SET modelo = :modelo, marca = :marca, anio = :anio, 
@@ -60,7 +56,6 @@ class AccesoDatosVehiculo {
         ]);
     }
 
-    // Modificar estado parcialmente (PATCH)
     public static function actualizarEstadoVehiculo($id, $estado) {
         $conexion = ConectorPDO::conectar();
         $sql = "UPDATE vehiculos SET estado = :estado WHERE id = :id";
@@ -71,7 +66,6 @@ class AccesoDatosVehiculo {
         ]);
     }
 
-    // Eliminar un auto
     public static function eliminarVehiculo($id) {
         $conexion = ConectorPDO::conectar();
         $sql = "DELETE FROM vehiculos WHERE id = :id";
